@@ -121,7 +121,7 @@ NodeJs -> add Nodes -> name: node16 -> install automatically (install from adopt
             attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
         }
     }
-
+}
 
 
 ## Install OWASP Dependency Check Plugins
@@ -142,12 +142,155 @@ NodeJs -> add Nodes -> name: node16 -> install automatically (install from adopt
             }
         }
   ```
+## Docker Image Build and Push
+We need to install the Docker tool in our system, Goto Dashboard → Manage Plugins → Available plugins → Search for Docker and install these plugins
+Docker
+Docker Commons
+Docker Pipeline
+Docker API
+docker-build-step
+and click on install without restart
+
+- Now, goto Dashboard → Manage Jenkins → Tools → Docker INstallation -> name: docker -> Install Automatically -> version:latest.
+Add DockerHub Username and Password under Global Credentials
+- kind: username and password -> scope: global -> username: DockerHUb username -> password: DockerHub password -> ID: docker-cred -> Description: docker-cred.
 
   ```bash
-  
+  stage("Docker Build & Push"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker'){
+                       sh "docker build --build-arg TMDB_V3_API_KEY=_your API -t netflix ."
+                       sh "docker tag netflix aankusshhh/netflix:latest "
+                       sh "docker push aankusshhh/netflix:latest "
+                    }
+                }
+            }
+        }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image aankusshhh/netflix:latest > trivyimage.txt"
+            }
+        }
   ```
+
+  Now Run the container to see if the game coming up or not by adding the below stage
   ```bash
-  
+  stage('Deploy to container'){
+            steps{
+                sh 'docker run -d --name netflix -p 8081:80 aankusshhh/netflix:latest'
+            }
+        }
   ```
-  
+
+  <Jenkins-public-ip:8081>
+
+  ![](Result_Images/2.png)
+
+
+  # Full Pipeline
+  ```bash
+  pipeline{
+    agent any
+    tools{
+        jdk 'jdk17'
+        nodejs 'node16'
+    }
+    environment {
+        SCANNER_HOME=tool 'sonar-scanner'
+    }
+    stages {
+        stage('Clean workspace'){
+            steps{
+                cleanWs()
+            }
+        }
+        stage('Checkout from Git'){
+            steps{
+                git branch: 'main', url: 'https://github.com/aankusshh/Netflix-clone.git'
+            }
+        }
+        stage("Sonarqube Analysis "){
+            steps{
+                withSonarQubeEnv('sonar-server') {
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
+                    -Dsonar.projectKey=Netflix '''
+                }
+            }
+        }
+        stage("Quality gate"){
+           steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-cred'
+                }
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh "npm install"
+            }
+        }
+        
+        stage('OWASP FS SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DC'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
+            }
+        }
+        
+        stage("Docker Build & Push"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker'){
+                       sh "docker build --build-arg TMDB_V3_API_KEY=e79eaf017d4841bc101ab156988543ce -t netflix ."
+                       sh "docker tag netflix aankusshhh/netflix:latest "
+                       sh "docker push aankusshhh/netflix:latest "
+                    }
+                }
+            }
+        }
+        stage("TRIVY"){
+            steps{
+                sh "trivy image aankusshhh/netflix:latest > trivyimage.txt"
+            }
+        }
+        stage('Deploy to container'){
+            steps{
+                sh 'docker rm -f netflix'
+                sh 'docker run -d --name netflix -p 8081:80 aankusshhh/netflix:latest'
+            }
+        }
+        stage('Deploy to kubernets'){
+            steps{
+                script{
+                    dir('Kubernetes') {
+                        withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.38.16:6443') {
+                                sh 'kubectl apply -f deployment.yml'
+                                sh 'kubectl apply -f service.yml'
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+    }
+    post {
+     always {
+        emailext attachLog: true,
+            subject: "'${currentBuild.result}'",
+            body: "Project: ${env.JOB_NAME}<br/>" +
+                "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                "URL: ${env.BUILD_URL}<br/>",
+            to: 'ankush56singh@gmail.com',
+            attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
+        }
+    }
+  }
+ ```
 
