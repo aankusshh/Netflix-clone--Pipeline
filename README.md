@@ -28,3 +28,7 @@ Configure tools and Creating CICD pipeline on jenkins
 [Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Jenkins%20Plugins%20and%20Pipeline.md) for stepwise setup of server.
 ![](Images/1.png)
 
+# Phase 4
+Result [click here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Result.md)
+For 
+
