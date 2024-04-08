@@ -24,6 +24,7 @@ Create a TMDB API Key:
 
 # Phase 3
 Configure tools and Creating CICD pipeline on jenkins
+### Successfully Built Pipeline
 [Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Jenkins%20Plugins%20and%20Pipeline.md) for stepwise setup of server.
 ![](Images/1.png)
 
