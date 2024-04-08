@@ -2,9 +2,10 @@
 Create and set Up 4 EC2 instances:
 1. Jenkins [Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Jenkins%20Server%20Setup.md) for stepwise setup of server.
 2. Monitoring  [Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Monitor%20Server.md) for stepwise setup of server.
-3. Kubernetes - Master (For Set up )
-4. Kubernetes - Slave (For Set up )
-   
+3. Kubernetes - Master [Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Kuberenetes%20Setup.md) for stepwise setup of server.
+4. Kubernetes - Slave [Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Kuberenetes%20Setup.md) for stepwise setup of server.
+
+
 # Phase 2
 Create a TMDB API Key:
 ### STEPS:
@@ -21,7 +22,8 @@ Create a TMDB API Key:
 ![Alt Text](Result_Images/11.png)
 
 
-
-
 # Phase 3
-# Phase 4
+Configure tools and Creating CICD pipeline on jenkins
+[Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Jenkins%20Plugins%20and%20Pipeline.md) for stepwise setup of server.
+![](Result_Images/1.png)
+
