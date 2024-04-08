@@ -18,7 +18,7 @@ Create a TMDB API Key:
 8. Now you have to accept the terms and conditions.
 9. Provide basic details (Application Summary must contain more tha 100 words)
 10. Click on submit and you will get your API key.
-![](Result Images/11.png)
+![Alt Text](Result Images/11.png)
 
 
 
