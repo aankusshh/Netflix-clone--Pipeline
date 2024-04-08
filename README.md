@@ -19,11 +19,11 @@ Create a TMDB API Key:
 8. Now you have to accept the terms and conditions.
 9. Provide basic details (Application Summary must contain more tha 100 words)
 10. Click on submit and you will get your API key.
-![Alt Text](Result_Images/11.png)
+![Alt Text](Images/11.png)
 
 
 # Phase 3
 Configure tools and Creating CICD pipeline on jenkins
 [Click Here](https://github.com/aankusshh/Netflix-clone--Pipeline/blob/main/Jenkins%20Plugins%20and%20Pipeline.md) for stepwise setup of server.
-![](Result_Images/1.png)
+![](Images/1.png)
 
