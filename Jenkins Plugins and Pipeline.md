@@ -187,11 +187,9 @@ Add DockerHub Username and Password under Global Credentials
 
   ![](Images/Pipeline.jpeg)
 
-  ![](Images/2.png)
-
 
   # Full Pipeline
-  ```bash
+  ```
   pipeline{
     agent any
     tools{
@@ -294,5 +292,9 @@ Add DockerHub Username and Password under Global Credentials
         }
     }
   }
- ```
+  
+ 
+
+
+![](Images/2.png)
 
