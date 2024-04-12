@@ -185,6 +185,8 @@ Add DockerHub Username and Password under Global Credentials
 
   <Jenkins-public-ip:8081>
 
+  ![](Result_Images/Pipeline.jpeg)
+
   ![](Result_Images/2.png)
 
 
